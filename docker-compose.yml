@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  web:
+    build: .
+    container_name: music_web
+    volumes:
+      - .:/usr/src/app/
+    restart: always
+
+  nginx:
+    build: ./nginx
+    container_name: music_nginx
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./static:/usr/share/nginx/html/static
+      - ./media:/usr/share/nginx/html/media
+    restart: always
