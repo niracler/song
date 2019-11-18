@@ -12,7 +12,7 @@ from .serializers import SongSerializer
 
 class SongPagination(PageNumberPagination):
     """用于文章内容分页的类"""
-    page_size = 50
+    page_size = 10
     page_size_query_param = 'page_size'
     page_query_param = 'p'
     max_page_size = 300
