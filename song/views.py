@@ -23,8 +23,8 @@ class SongViewSet(viewsets.GenericViewSet, ListModelMixin):
     pagination_class = SongPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = SongFiliter
-    search_fields = ('mid', 'name')
-    ordering_fields = ('mid', 'created')
+    search_fields = ('sid', 'name')
+    ordering_fields = ('sid', 'created')
 
     def get_serializer_class(self):
         return SongSerializer
