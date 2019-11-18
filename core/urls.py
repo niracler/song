@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework import routers
 from song.views import SongViewSet
 
+
 router = routers.DefaultRouter()
 router.register('song', SongViewSet)
 

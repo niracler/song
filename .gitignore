@@ -181,5 +181,5 @@ static/
 
 migrations/
 
-nginx/cert/gamenews.key
-nginx/cert/gamenews.pem
+nginx/cert/music02.key
+nginx/cert/music02.pem
