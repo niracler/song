@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
+
 from .models import Song, Author, PlayList
 
 
@@ -13,16 +15,13 @@ class AuthorSerializer(serializers.ModelSerializer):
 class AuthorCreateSerializer(serializers.ModelSerializer):
     """关于作者创建的序列化函数"""
 
+    aid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=Author.objects.all())],
+                                   help_text='空的话， 就是自增序列', required=False)
     name = serializers.CharField(label="作者名", required=True, allow_blank=False)
 
     class Meta:
         model = Author
         fields = ('aid', 'name')
-
-    def create(self, validated_data):
-        author, created = Author.objects.update_or_create(name=validated_data['name'])
-
-        return author
 
 
 class SongSerializer(serializers.ModelSerializer):
@@ -42,6 +41,8 @@ class SongListSerializer(serializers.ModelSerializer):
 
 class SongCreateSerializer(serializers.ModelSerializer):
     """关于歌曲创建的序列化函数"""
+    sid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=Song.objects.all())],
+                                   help_text='空的话， 就是自增序列', required=False)
 
     class Meta:
         model = Song
@@ -60,6 +61,9 @@ class PlayListSerializer(serializers.ModelSerializer):
 class PlayListCreateSerializer(serializers.ModelSerializer):
     """关于歌曲创建的序列化函数"""
 
+    lid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=PlayList.objects.all())],
+                                   help_text='空的话， 就是自增序列', required=False)
+
     class Meta:
         model = PlayList
-        fields = ('name', 'tracks')
+        fields = ('lid', 'name', 'tracks')
