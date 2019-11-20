@@ -13,9 +13,16 @@ class AuthorSerializer(serializers.ModelSerializer):
 class AuthorCreateSerializer(serializers.ModelSerializer):
     """关于作者创建的序列化函数"""
 
+    name = serializers.CharField(label="作者名", required=True, allow_blank=False)
+
     class Meta:
         model = Author
-        fields = ('name',)
+        fields = ('aid', 'name')
+
+    def create(self, validated_data):
+        author, created = Author.objects.update_or_create(name=validated_data['name'])
+
+        return author
 
 
 class SongSerializer(serializers.ModelSerializer):
@@ -38,7 +45,7 @@ class SongCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Song
-        fields = ('name', 'file', 'authors')
+        fields = ('sid', 'name', 'file', 'authors')
 
 
 class PlayListSerializer(serializers.ModelSerializer):
