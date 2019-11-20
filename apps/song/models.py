@@ -36,7 +36,7 @@ class Song(models.Model):
 class PlayList(models.Model):
     lid = models.AutoField(primary_key=True, verbose_name='ID')
     name = models.CharField(max_length=128, verbose_name='歌单名称')
-    songs = models.ManyToManyField(Song, related_name='song_playlist', verbose_name='歌曲列表')
+    tracks = models.ManyToManyField(Song, related_name='tracks', verbose_name='歌曲列表')
     creator = models.IntegerField(default=1, verbose_name='创建者ID')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
