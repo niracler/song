@@ -4,10 +4,19 @@ from .tools import get_songs_path
 
 # Create your models here.
 
+class Tag(models.Model):
+    pass
+
+
+class Comment(models.Model):
+    pass
+
+
 class Author(models.Model):
     aid = models.AutoField(primary_key=True, verbose_name='ID')
     name = models.CharField(max_length=128, verbose_name='作者名', unique=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    description = models.TextField(default='这人什么都没写', verbose_name='作者描述')
 
     class Meta:
         ordering = ('-aid',)
@@ -39,6 +48,7 @@ class PlayList(models.Model):
     tracks = models.ManyToManyField(Song, related_name='tracks', verbose_name='歌曲列表')
     creator = models.IntegerField(default=1, verbose_name='创建者ID')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    description = models.TextField(verbose_name='歌单描述')
 
     class Meta:
         ordering = ('-lid',)
