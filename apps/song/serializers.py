@@ -96,7 +96,7 @@ class PlayListCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PlayList
-        fields = ('lid', 'name', 'tracks', 'tags')
+        fields = ('lid', 'name', 'tracks', 'tags', 'description')
 
     def create(self, validated_data):
 
