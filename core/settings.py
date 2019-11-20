@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
-    'taggit',
-    'taggit_serializer',
     'song.apps.SongConfig',
 
 ]

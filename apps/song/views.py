@@ -4,8 +4,7 @@ from rest_framework import viewsets, filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
     RetrieveModelMixin
-from taggit.models import Tag
-from .models import Song, Author, PlayList, Comment
+from .models import Song, Author, PlayList, Comment, Tag
 from .filters import SongFiliter, AuthorFiliter, PlayListFiliter
 from .serializers import SongListSerializer, SongSerializer, SongCreateSerializer, AuthorSerializer, \
     AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \

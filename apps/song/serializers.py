@@ -1,8 +1,7 @@
 from django.db.models import Count
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from taggit.models import Tag
-from .models import Song, Author, PlayList, Comment
+from .models import Song, Author, PlayList, Comment, Tag
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -14,7 +13,7 @@ class TagSerializer(serializers.ModelSerializer):
 
     def get_num_times(self, obj):
         queryset = Tag.objects.filter(name=obj.name)
-        tags = queryset.annotate(num_times=Count('taggit_taggeditem_items'))
+        tags = queryset.annotate(num_times=Count('song_playlist_tags'))
 
         return tags[0].num_times
 
@@ -82,7 +81,7 @@ class PlayListSerializer(serializers.ModelSerializer):
     def get_tags(self, obj):
         tags = []
         for i in obj.tags.all():
-            tag = {'id': i.id, 'name': i.name}
+            tag = {'tid': i.tid, 'name': i.name}
             tags.append(tag)
         return tags
 
@@ -92,28 +91,29 @@ class PlayListCreateSerializer(serializers.ModelSerializer):
 
     lid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=PlayList.objects.all())],
                                    help_text='空的话， 就是自增序列', required=False)
-    tags = serializers.CharField(label="文章标签", help_text="文章标签", required=False)
+    stags = serializers.CharField(label="文章标签的字符串", required=False)
 
     class Meta:
         model = PlayList
-        fields = ('lid', 'name', 'tags', 'description')
+        fields = ('lid', 'name', 'stags', 'description')
 
     def create(self, validated_data):
 
         playlist = PlayList.objects.create(
             lid=validated_data['lid'],
-	    name=validated_data['name'],
-            description=validated_data['description'],        
-)
+            name=validated_data['name'],
+            description=validated_data['description'],
+        )
 
         try:
-            tags = validated_data['tags']
+            tags = validated_data['str_tags']
             for tag in tags.split(' '):
-                if tag:
-                    playlist.tags.add(tag)
-            playlist.tags = tags
+                tag, created = Tag.objects.update_or_create(name=tag)
+                playlist.tags.add(tag)
+
+            playlist.str_tags = validated_data['stags']
         except Exception as e:
-            playlist.tags = ""
+            playlist.str_tags = ""
 
         return playlist
 
@@ -124,7 +124,6 @@ class PlayListUpdateSerializer(serializers.ModelSerializer):
         fields = ('lid', 'tracks')
 
     def update(self, instance, validated_data):
-
         for track in validated_data['tracks']:
             instance.tracks.add(track)
 

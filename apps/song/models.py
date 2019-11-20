@@ -5,6 +5,18 @@ from taggit.managers import TaggableManager
 
 # Create your models here.
 
+class Tag(models.Model):
+    tid = models.BigAutoField(primary_key=True, verbose_name='ID')
+    name = models.CharField(max_length=32, unique=True, verbose_name='标签名')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+
+    class Meta:
+        ordering = ('-tid',)
+
+    def __str__(self):
+        return self.name
+
+
 class Comment(models.Model):
     cid = models.BigAutoField(primary_key=True, verbose_name='ID')
     body = models.CharField(max_length=512, verbose_name='评论内容')
@@ -51,7 +63,7 @@ class PlayList(models.Model):
     name = models.CharField(max_length=128, verbose_name='歌单名称')
     tracks = models.ManyToManyField(Song, related_name='tracks', verbose_name='歌曲列表')
     creator = models.IntegerField(default=1, verbose_name='创建者ID')
-    tags = TaggableManager()
+    tags = models.ManyToManyField(Tag, related_name='playlist_tag', verbose_name='标签')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     description = models.TextField(verbose_name='歌单描述')
 
