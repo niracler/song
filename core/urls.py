@@ -20,12 +20,14 @@ from django.views.static import serve
 from rest_framework import routers
 
 from core.settings import MEDIA_ROOT
-from song.views import SongViewSet, AuthorViewSet, PlayListViewSet
+from song.views import SongViewSet, AuthorViewSet, PlayListViewSet, TagViewSet, CommentViewSet
 
 router = routers.DefaultRouter()
 router.register('song', SongViewSet)
 router.register('author', AuthorViewSet)
 router.register('playlist', PlayListViewSet)
+router.register('tag', TagViewSet)
+router.register('comment', CommentViewSet)
 
 urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),

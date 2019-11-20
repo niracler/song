@@ -4,10 +4,12 @@ from rest_framework import viewsets, filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
     RetrieveModelMixin
-from .models import Song, Author, PlayList
+from taggit.models import Tag
+from .models import Song, Author, PlayList, Comment
 from .filters import SongFiliter, AuthorFiliter, PlayListFiliter
 from .serializers import SongListSerializer, SongSerializer, SongCreateSerializer, AuthorSerializer, \
-    AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer
+    AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
+    PlayListUpdateSerializer
 
 
 # Create your views here.
@@ -18,6 +20,38 @@ class Pagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     page_query_param = 'p'
     max_page_size = 300
+
+
+class TagViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+                 DestroyModelMixin):
+    queryset = Tag.objects.all()
+    pagination_class = Pagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('tid', 'name')
+    ordering_fields = ('tid', 'name', 'created')
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return TagSerializer
+        elif self.action == "create":
+            return TagSerializer
+        return TagSerializer
+
+
+class CommentViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+                     DestroyModelMixin):
+    queryset = Comment.objects.all()
+    pagination_class = Pagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('cid', 'body')
+    ordering_fields = ('cid', 'body', 'created')
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return CommentSerializer
+        elif self.action == "create":
+            return CommentSerializer
+        return CommentSerializer
 
 
 class SongViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
@@ -68,4 +102,6 @@ class PlayListViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin,
             return PlayListSerializer
         elif self.action == "create":
             return PlayListCreateSerializer
+        elif self.action == "update":
+            return PlayListUpdateSerializer
         return PlayListSerializer
