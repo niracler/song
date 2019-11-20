@@ -96,20 +96,15 @@ class PlayListCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PlayList
-        fields = ('lid', 'name', 'tracks', 'tags', 'description')
+        fields = ('lid', 'name', 'tags', 'description')
 
     def create(self, validated_data):
 
         playlist = PlayList.objects.create(
-            name=validated_data['name'],
-        )
-
-        try:
-            tracks = validated_data['tracks']
-            for track in tracks:
-                playlist.tracks.add(track)
-        except Exception as e:
-            print(e)
+            lid=validated_data['lid'],
+	    name=validated_data['name'],
+            description=validated_data['description'],        
+)
 
         try:
             tags = validated_data['tags']
