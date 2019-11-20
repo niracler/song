@@ -4,6 +4,7 @@ services:
   web:
     build: .
     container_name: music_web
+    env_file: .env
     volumes:
       - .:/usr/src/app/
     restart: always
@@ -12,7 +13,7 @@ services:
     build: ./nginx
     container_name: music_nginx
     ports:
-      - "8001:8000"
+      - "8000:8000"
     volumes:
       - ./static:/usr/share/nginx/html/static
       - ./media:/usr/share/nginx/html/media
