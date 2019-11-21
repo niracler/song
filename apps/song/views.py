@@ -10,7 +10,7 @@ from .filters import SongFiliter, AuthorFiliter, PlayListFiliter
 from .serializers import SongListSerializer, SongSerializer, SongCreateSerializer, AuthorSerializer, \
     AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
     PlayListUpdateSerializer
-
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
 # Create your views here.
 
@@ -22,7 +22,7 @@ class Pagination(PageNumberPagination):
     max_page_size = 300
 
 
-class TagViewSet(viewsets.GenericViewSet, ListModelMixin):
+class TagViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin):
     tag_queryset = Tag.objects.all()
     queryset = tag_queryset.annotate(num_times=Count('playlist_tag'))
     pagination_class = Pagination
@@ -34,7 +34,7 @@ class TagViewSet(viewsets.GenericViewSet, ListModelMixin):
         return TagSerializer
 
 
-class CommentViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+class CommentViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
                      DestroyModelMixin):
     queryset = Comment.objects.all()
     pagination_class = Pagination
@@ -50,7 +50,7 @@ class CommentViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, 
         return CommentSerializer
 
 
-class SongViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
                   DestroyModelMixin):
     queryset = Song.objects.all()
     pagination_class = Pagination
@@ -69,7 +69,7 @@ class SongViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, Ret
         return SongSerializer
 
 
-class AuthorViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+class AuthorViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
                     DestroyModelMixin):
     author_queryset = Author.objects.all()
     queryset = author_queryset.annotate(num_songs=Count('song_author'))
@@ -87,7 +87,7 @@ class AuthorViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, R
         return AuthorSerializer
 
 
-class PlayListViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
                       DestroyModelMixin):
     queryset = PlayList.objects.all()
     pagination_class = Pagination
