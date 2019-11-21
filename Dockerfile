@@ -19,6 +19,8 @@ COPY requirements.txt ./
 
 RUN pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
+COPY . /usr/src/app/
+
 # copy entrypoint.sh
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 

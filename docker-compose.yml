@@ -15,7 +15,8 @@ services:
     container_name: music_web
     env_file: .env
     volumes:
-      - .:/usr/src/app/
+      - media:/usr/src/app/media/
+      - static:/usr/src/app/static/
     restart: always
 
   nginx:
@@ -24,9 +25,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./static:/usr/share/nginx/html/static
-      - ./media:/usr/share/nginx/html/media
+      - static:/usr/share/nginx/html/static
+      - media:/usr/share/nginx/html/media
     restart: always
 
 volumes:
   redis_data:
+  media:
+  static:
