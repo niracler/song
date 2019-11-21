@@ -1,6 +1,15 @@
 version: "3"
 
 services:
+  redis:
+    image: redis
+    container_name: gamenews_redis
+    volumes:
+      - redis_data:/data
+    command: --appendonly yes --requirepass "123456"
+    restart: always
+    ports:
+      - "6377:6379"
   web:
     build: .
     container_name: music_web
@@ -18,3 +27,6 @@ services:
       - ./static:/usr/share/nginx/html/static
       - ./media:/usr/share/nginx/html/media
     restart: always
+
+volumes:
+  redis_data:

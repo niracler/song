@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
@@ -21,19 +22,15 @@ class Pagination(PageNumberPagination):
     max_page_size = 300
 
 
-class TagViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
-                 DestroyModelMixin):
-    queryset = Tag.objects.all()
+class TagViewSet(viewsets.GenericViewSet, ListModelMixin):
+    tag_queryset = Tag.objects.all()
+    queryset = tag_queryset.annotate(num_times=Count('playlist_tag'))
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    search_fields = ('tid', 'name')
-    ordering_fields = ('tid', 'name', 'created')
+    search_fields = ('name',)
+    ordering_fields = ('tid', 'name', 'num_times', 'created')
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return TagSerializer
-        elif self.action == "create":
-            return TagSerializer
         return TagSerializer
 
 
@@ -59,7 +56,7 @@ class SongViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, Ret
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = SongFiliter
-    search_fields = ('sid', 'name')
+    search_fields = ('name',)
     ordering_fields = ('sid', 'name', 'created')
 
     def get_serializer_class(self):
@@ -67,17 +64,20 @@ class SongViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, Ret
             return SongListSerializer
         elif self.action == "create":
             return SongCreateSerializer
+        elif self.action == "retrieve":
+            return SongListSerializer
         return SongSerializer
 
 
 class AuthorViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
                     DestroyModelMixin):
-    queryset = Author.objects.all()
+    author_queryset = Author.objects.all()
+    queryset = author_queryset.annotate(num_songs=Count('song_author'))
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = AuthorFiliter
-    search_fields = ('aid', 'name')
-    ordering_fields = ('aid', 'name', 'created')
+    search_fields = ('name',)
+    ordering_fields = ('aid', 'name', 'created', 'num_songs')
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -93,7 +93,7 @@ class PlayListViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin,
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = PlayListFiliter
-    search_fields = ('lid', 'name')
+    search_fields = ('name', 'description')
     ordering_fields = ('lid', 'name', 'created')
 
     def get_serializer_class(self):
