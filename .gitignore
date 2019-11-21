@@ -179,7 +179,7 @@ media/
 
 static/
 
-migrations/
+**/migrations/0*.py
 
 nginx/cert/music02.key
 nginx/cert/music02.pem
