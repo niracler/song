@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'song.apps.SongConfig',    
+    'song.apps.SongConfig',
     'rest_framework',
     'django_filters',
     'corsheaders',
@@ -136,3 +136,27 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 FILE_UPLOAD_PERMISSIONS = 0o644
+
+# 缓存设置
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60
+}
+
+# 使用redis缓存
+CACHES = {
+    "default": {
+        "BACKEND": os.environ.get('CACHES_BACKEND', 'django.core.cache.backends.locmem.LocMemCache'),
+        "LOCATION": os.environ.get('REDIS_HOST', 'redis://root:123456@redis:6379'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://bc2e35585cfc4bfda746dea934ceee70@sentry.io/1828587",
+    integrations=[DjangoIntegration()]
+)
