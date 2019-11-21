@@ -7,12 +7,11 @@ class SongFiliter(django_filters.rest_framework.FilterSet):
     sid = django_filters.CharFilter(field_name='sid')
     name = django_filters.CharFilter(field_name='name')
     created = django_filters.CharFilter(field_name='created')
+    authors = django_filters.CharFilter(field_name='authors')
 
     class Meta:
         model = Song
-        fields = [
-            'sid', 'name', 'created'
-        ]
+        fields = ['sid', 'name', 'created', 'authors']
 
 
 class AuthorFiliter(django_filters.rest_framework.FilterSet):
@@ -23,9 +22,7 @@ class AuthorFiliter(django_filters.rest_framework.FilterSet):
 
     class Meta:
         model = Author
-        fields = [
-            'aid', 'name', 'created'
-        ]
+        fields = ['aid', 'name', 'created']
 
 
 class PlayListFiliter(django_filters.rest_framework.FilterSet):
@@ -33,9 +30,8 @@ class PlayListFiliter(django_filters.rest_framework.FilterSet):
     lid = django_filters.CharFilter(field_name='lid')
     name = django_filters.CharFilter(field_name='name')
     created = django_filters.CharFilter(field_name='created')
+    tags = django_filters.CharFilter(field_name='tags')
 
     class Meta:
         model = PlayList
-        fields = [
-            'lid', 'name', 'created'
-        ]
+        fields = ['lid', 'name', 'created', 'tags']
