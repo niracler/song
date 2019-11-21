@@ -41,11 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'song.apps.SongConfig',    
     'rest_framework',
     'django_filters',
     'corsheaders',
-    'song.apps.SongConfig',
-
 ]
 
 MIDDLEWARE = [

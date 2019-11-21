@@ -106,14 +106,14 @@ class PlayListCreateSerializer(serializers.ModelSerializer):
         )
 
         try:
-            tags = validated_data['str_tags']
+            tags = validated_data['stags']
             for tag in tags.split(' '):
                 tag, created = Tag.objects.update_or_create(name=tag)
                 playlist.tags.add(tag)
 
-            playlist.str_tags = validated_data['stags']
+            playlist.stags = validated_data['stags']
         except Exception as e:
-            playlist.str_tags = ""
+            playlist.stags = ""
 
         return playlist
 

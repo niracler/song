@@ -1,6 +1,5 @@
 from django.db import models
 from .tools import get_songs_path
-from taggit.managers import TaggableManager
 
 
 # Create your models here.
