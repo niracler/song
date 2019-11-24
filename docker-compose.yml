@@ -17,6 +17,8 @@ services:
     volumes:
       - media:/usr/src/app/media/
       - static:/usr/src/app/static/
+    ports:
+      - "8002:8000"
     restart: always
 
   nginx:
