@@ -78,7 +78,7 @@ class AuthorViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin,
                     UpdateModelMixin,
                     DestroyModelMixin):
     author_queryset = Author.objects.all()
-    queryset = author_queryset.annotate(num_songs=Count('song_author'))
+    queryset = author_queryset.annotate(numSongs=Count('song_author'))
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = AuthorFiliter
