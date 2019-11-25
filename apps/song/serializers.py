@@ -7,13 +7,13 @@ from .models import Song, Author, PlayList, Comment, Tag
 # -------------------------标签的序列化函数---------------------------------
 
 class TagSerializer(serializers.ModelSerializer):
-    num_times = serializers.SerializerMethodField(read_only=True)
+    times = serializers.SerializerMethodField(read_only=True)
 
-    def get_num_times(self, obj):
+    def get_times(self, obj):
         queryset = Tag.objects.filter(name=obj.name)
-        tags = queryset.annotate(num_times=Count('playlist_tag'))
+        tags = queryset.annotate(times=Count('playlist_tag'))
 
-        return tags[0].num_times
+        return tags[0].times
 
     class Meta:
         model = Tag
@@ -33,13 +33,13 @@ class CommentSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     """关于作者的序列化函数"""
 
-    num_songs = serializers.SerializerMethodField(read_only=True)
+    numSongs = serializers.SerializerMethodField(read_only=True, method_name='get_num_songs')
 
     def get_num_songs(self, obj):
         queryset = Author.objects.filter(name=obj.name)
-        authors = queryset.annotate(num_songs=Count('song_author'))
+        authors = queryset.annotate(numSongs=Count('song_author'))
 
-        return authors[0].num_songs
+        return authors[0].numSongs
 
     class Meta:
         model = Author

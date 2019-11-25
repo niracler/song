@@ -18,8 +18,8 @@ from rest_framework_extensions.cache.mixins import CacheResponseMixin
 class Pagination(PageNumberPagination):
     """用于内容分页的类"""
     page_size = 10
-    page_size_query_param = 'page_size'
-    page_query_param = 'p'
+    page_size_query_param = 'pageSize'
+    page_query_param = 'page'
     max_page_size = 300
 
 
@@ -29,7 +29,7 @@ class TagViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin):
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     search_fields = ('name',)
-    ordering_fields = ('tid', 'name', 'num_times', 'created')
+    ordering_fields = ('tid', 'name', 'times', 'created')
 
     def get_serializer_class(self):
         return TagSerializer
@@ -83,7 +83,7 @@ class AuthorViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin,
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = AuthorFiliter
     search_fields = ('name',)
-    ordering_fields = ('aid', 'name', 'created', 'num_songs')
+    ordering_fields = ('aid', 'name', 'created', 'numSongs')
 
     def get_serializer_class(self):
         if self.action == "list":
