@@ -9,16 +9,17 @@ from .models import Song, Author, PlayList, Comment, Tag
 from .filters import SongFiliter, AuthorFiliter, PlayListFiliter
 from .serializers import SongListSerializer, SongSerializer, SongCreateSerializer, AuthorSerializer, \
     AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
-    PlayListUpdateSerializer
+    PlayListUpdateSerializer, SongUpdateSerializer
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
+
 
 # Create your views here.
 
 class Pagination(PageNumberPagination):
     """用于内容分页的类"""
     page_size = 10
-    page_size_query_param = 'page_size'
-    page_query_param = 'p'
+    page_size_query_param = 'pageSize'
+    page_query_param = 'page'
     max_page_size = 300
 
 
@@ -28,13 +29,14 @@ class TagViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin):
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     search_fields = ('name',)
-    ordering_fields = ('tid', 'name', 'num_times', 'created')
+    ordering_fields = ('tid', 'name', 'times', 'created')
 
     def get_serializer_class(self):
         return TagSerializer
 
 
-class CommentViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+class CommentViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
+                     UpdateModelMixin,
                      DestroyModelMixin):
     queryset = Comment.objects.all()
     pagination_class = Pagination
@@ -50,7 +52,8 @@ class CommentViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin
         return CommentSerializer
 
 
-class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
+                  UpdateModelMixin,
                   DestroyModelMixin):
     queryset = Song.objects.all()
     pagination_class = Pagination
@@ -66,10 +69,13 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
             return SongCreateSerializer
         elif self.action == "retrieve":
             return SongListSerializer
+        elif self.action == "update":
+            return SongUpdateSerializer
         return SongSerializer
 
 
-class AuthorViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+class AuthorViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
+                    UpdateModelMixin,
                     DestroyModelMixin):
     author_queryset = Author.objects.all()
     queryset = author_queryset.annotate(num_songs=Count('song_author'))
@@ -77,7 +83,7 @@ class AuthorViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin,
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = AuthorFiliter
     search_fields = ('name',)
-    ordering_fields = ('aid', 'name', 'created', 'num_songs')
+    ordering_fields = ('aid', 'name', 'created', 'numSongs')
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -87,7 +93,8 @@ class AuthorViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin,
         return AuthorSerializer
 
 
-class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
+class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
+                      UpdateModelMixin,
                       DestroyModelMixin):
     queryset = PlayList.objects.all()
     pagination_class = Pagination

@@ -7,13 +7,13 @@ from .models import Song, Author, PlayList, Comment, Tag
 # -------------------------标签的序列化函数---------------------------------
 
 class TagSerializer(serializers.ModelSerializer):
-    num_times = serializers.SerializerMethodField(read_only=True)
+    times = serializers.SerializerMethodField(read_only=True)
 
-    def get_num_times(self, obj):
+    def get_times(self, obj):
         queryset = Tag.objects.filter(name=obj.name)
-        tags = queryset.annotate(num_times=Count('playlist_tag'))
+        tags = queryset.annotate(times=Count('playlist_tag'))
 
-        return tags[0].num_times
+        return tags[0].times
 
     class Meta:
         model = Tag
@@ -33,13 +33,13 @@ class CommentSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     """关于作者的序列化函数"""
 
-    num_songs = serializers.SerializerMethodField(read_only=True)
+    numSongs = serializers.SerializerMethodField(read_only=True, method_name='get_num_songs')
 
     def get_num_songs(self, obj):
         queryset = Author.objects.filter(name=obj.name)
-        authors = queryset.annotate(num_songs=Count('song_author'))
+        authors = queryset.annotate(numSongs=Count('song_author'))
 
-        return authors[0].num_songs
+        return authors[0].numSongs
 
     class Meta:
         model = Author
@@ -94,7 +94,21 @@ class SongCreateSerializer(serializers.ModelSerializer):
         fields = ('sid', 'name', 'file', 'authors')
 
 
+class SongUpdateSerializer(serializers.ModelSerializer):
+    """关于歌曲修改的序列化函数"""
+
+    class Meta:
+        model = Song
+        fields = ('name', 'authors')
+
+
 # -------------------------歌单的序列化函数---------------------------------
+
+class TagSamllSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('tid', 'name')
+
 
 class SongSmallSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,18 +119,11 @@ class SongSmallSerializer(serializers.ModelSerializer):
 class PlayListSerializer(serializers.ModelSerializer):
     """关于歌单的序列化函数"""
     tracks = SongSmallSerializer(many=True)
-    tags = serializers.SerializerMethodField('get_tags')
+    tags = TagSamllSerializer(many=True)
 
     class Meta:
         model = PlayList
         fields = "__all__"
-
-    def get_tags(self, obj):
-        tags = []
-        for i in obj.tags.all():
-            tag = {'tid': i.tid, 'name': i.name}
-            tags.append(tag)
-        return tags
 
 
 class PlayListCreateSerializer(serializers.ModelSerializer):
@@ -152,12 +159,26 @@ class PlayListCreateSerializer(serializers.ModelSerializer):
 
 
 class PlayListUpdateSerializer(serializers.ModelSerializer):
+    tags = TagSamllSerializer(many=True, read_only=True)
+    stags = serializers.CharField(label="文章标签的字符串", help_text='标签与标签用空格隔开', required=False, write_only=True)
+
     class Meta:
         model = PlayList
-        fields = ('lid', 'tracks')
+        fields = ('name', 'tracks', 'description', 'stags', 'tags')
 
     def update(self, instance, validated_data):
-        for track in validated_data['tracks']:
-            instance.tracks.add(track)
+        playlist = super().update(instance, validated_data)
 
-        return instance
+        try:
+            tags = validated_data['stags']
+            tag_list = []
+            for tag in tags.split(' '):
+                tag, created = Tag.objects.update_or_create(name=tag)
+                tag_list.append(tag)
+
+            playlist.tags.set(tag_list)
+            playlist.stags = validated_data['stags']
+        except Exception as e:
+            playlist.stags = str(e)
+
+        return playlist
