@@ -33,13 +33,13 @@ class CommentSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     """关于作者的序列化函数"""
 
-    numSongs = serializers.SerializerMethodField(read_only=True, method_name='get_num_songs')
+    songs = serializers.SerializerMethodField(read_only=True, method_name='get_songs')
 
-    def get_num_songs(self, obj):
+    def get_songs(self, obj):
         queryset = Author.objects.filter(name=obj.name)
-        authors = queryset.annotate(numSongs=Count('song_author'))
+        authors = queryset.annotate(songs=Count('song_author'))
 
-        return authors[0].numSongs
+        return authors[0].songs
 
     class Meta:
         model = Author
