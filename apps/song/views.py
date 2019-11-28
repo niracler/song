@@ -1,7 +1,9 @@
 from django.db.models import Count
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import viewsets, filters
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
     RetrieveModelMixin
@@ -11,6 +13,7 @@ from .serializers import SongListSerializer, SongSerializer, SongCreateSerialize
     AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
     PlayListUpdateSerializer, SongUpdateSerializer
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
+from utils.permissions import IsOwnerOrReadOnly
 
 
 # Create your views here.
@@ -59,8 +62,14 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = SongFiliter
+    # permission_classes = (IsAuthenticated,)
+    # authentication_classes = ()
     search_fields = ('name',)
     ordering_fields = ('sid', 'name', 'created')
+
+    # def get_queryset(self):
+    #     """只取当前用户"""
+    #     return Song.objects.filter(creator=self.request.user.id)
 
     def get_serializer_class(self):
         if self.action == "list":
