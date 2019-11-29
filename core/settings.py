@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'song.apps.SongConfig',
+    'user.apps.UserConfig',
     'rest_framework',
     'django_filters',
     'corsheaders',
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'user.middleware.AuthMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
