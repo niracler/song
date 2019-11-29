@@ -25,7 +25,7 @@ class Pagination(PageNumberPagination):
 
 class TagViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin):
     tag_queryset = Tag.objects.all()
-    queryset = tag_queryset.annotate(num_times=Count('playlist_tag'))
+    queryset = tag_queryset.annotate(times=Count('playlist_tag'))
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     search_fields = ('name',)
@@ -81,7 +81,6 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
             return Song.objects.all()
 
     def get_serializer_class(self):
-        super().get_serializer_class()
         if self.action in ("list", "retrieve"):
             return SongListSerializer
         elif self.action == "create":
