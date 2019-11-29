@@ -72,10 +72,9 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
     def get_queryset(self):
         """有的情况下只取当前用户"""
         is_self = int(self.request.query_params.get('isSelf', ['1'])[0])
-        print(is_self)
         if bool(
                 self.action in ("update", "create") or
-                self.action == 'list' and is_self
+                (self.action == 'list' and self.request.myuser and is_self)
         ):
             return Song.objects.filter(creator=self.request.myuser.id)
         else:
