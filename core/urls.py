@@ -19,8 +19,10 @@ from django.urls import path, include
 from django.views.static import serve
 from rest_framework import routers
 
+from author.views import AuthorViewSet
 from core.settings import MEDIA_ROOT, STATIC_ROOT
-from song.views import SongViewSet, AuthorViewSet, PlayListViewSet, TagViewSet, CommentViewSet
+from song.views import SongViewSet, CommentViewSet
+from playlist.views import PlayListViewSet, TagViewSet
 
 router = routers.DefaultRouter()
 router.register('song', SongViewSet)
@@ -32,7 +34,5 @@ router.register('comment', CommentViewSet)
 urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
-    # path('admin/', admin.site.urls),
-    # path(''),
     path('', include(router.urls)),
 ]
