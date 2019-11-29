@@ -6,7 +6,7 @@ class SongFiliter(django_filters.rest_framework.FilterSet):
     """歌曲的api的过滤器"""
     sid = django_filters.CharFilter(field_name='sid')
     name = django_filters.CharFilter(field_name='name')
-    created = django_filters.CharFilter(field_name='created')
+    creator = django_filters.CharFilter(field_name='creator')
     authors = django_filters.CharFilter(field_name='authors')
 
     class Meta:
