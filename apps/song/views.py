@@ -81,6 +81,7 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
             return Song.objects.all()
 
     def get_serializer_class(self):
+        super().get_serializer_class()
         if self.action in ("list", "retrieve"):
             return SongListSerializer
         elif self.action == "create":

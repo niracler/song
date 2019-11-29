@@ -127,45 +127,50 @@ class SongSmallSerializer(serializers.ModelSerializer):
 class PlayListSerializer(serializers.ModelSerializer):
     """关于歌单的序列化函数"""
 
-    # tracks = SongSmallSerializer(many=True)
-    # tags = TagSamllSerializer(many=True)
     lid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=PlayList.objects.all())],
                                    help_text='空的话， 就是自增序列', required=False)
-    stags = serializers.CharField(label="文章标签的字符串", help_text='中间用空格隔开', required=True, write_only=True)
+    tags = serializers.SerializerMethodField()
+    stags = serializers.CharField(label="文章标签的字符串", help_text='中间用空格隔开', allow_null=True, allow_blank=True,
+                                  write_only=True)
+    tracks = serializers.SerializerMethodField(label="歌曲目录")
+
+    def get_tags(self, obj):
+        return [tag.name for tag in obj.tags.all()]
+
+    def get_tracks(self, obj):
+        if self.context['view'].action == 'retrieve':
+            return SongListSerializer(obj.tracks, many=True, context={'request': self.context['request']}).data
+        return [song.sid for song in obj.tracks.all()]
 
     class Meta:
         model = PlayList
         fields = "__all__"
-        # depth = 0
         read_only_fields = ('creator', 'tags')
 
     def create(self, validated_data):
         tags = validated_data.pop('stags')
         playlist = super().create(validated_data)
-
-        try:
-            for tag in tags.split(' '):
-                tag, created = Tag.objects.update_or_create(name=tag)
-                playlist.tags.add(tag)
-            playlist.stags = tags
-        except Exception as e:
-            playlist.stags = str(e)
+        playlist.tags.set(get_tag_list(tags))
 
         return playlist
 
     def update(self, instance, validated_data):
+        tags = validated_data.pop('stags')
         playlist = super().update(instance, validated_data)
-
-        try:
-            tags = validated_data['stags']
-            tag_list = []
-            for tag in tags.split(' '):
-                tag, created = Tag.objects.update_or_create(name=tag)
-                tag_list.append(tag)
-
-            playlist.tags.set(tag_list)
-            playlist.stags = validated_data['stags']
-        except Exception as e:
-            playlist.stags = str(e)
+        playlist.tags.set(get_tag_list(tags))
 
         return playlist
+
+
+def get_tag_list(tags):
+    tag_list = []
+
+    try:
+        for tag in tags.split(' '):
+            if tag:
+                tag, created = Tag.objects.update_or_create(name=tag)
+                tag_list.append(tag)
+    except Exception as e:
+        tag_list = []
+        print(e)
+    return tag_list
