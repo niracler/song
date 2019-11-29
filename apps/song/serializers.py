@@ -88,10 +88,18 @@ class SongCreateSerializer(serializers.ModelSerializer):
     """关于歌曲创建的序列化函数"""
     sid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=Song.objects.all())],
                                    help_text='空的话， 就是自增序列', required=False)
+    creator = serializers.IntegerField(label='用户ID', read_only=True)
 
     class Meta:
         model = Song
-        fields = ('sid', 'name', 'file', 'authors')
+        fields = ('sid', 'name', 'file', 'authors', 'creator')
+
+    def create(self, validated_data):
+        user = self.context['request'].myuser
+        song = super().create(validated_data)
+        song.creator = user.id
+        song.save()
+        return song
 
 
 class SongUpdateSerializer(serializers.ModelSerializer):

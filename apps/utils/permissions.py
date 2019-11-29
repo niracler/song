@@ -15,3 +15,15 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Instance must have an attribute named `owner`.
         return obj.creator == request.user.id
+
+
+class IsSongAuthenticated(permissions.BasePermission):
+    """
+    Allows access only to authenticated users.
+    """
+
+    def has_permission(self, request, view):
+        return bool(
+            request.method in ('GET', 'HEAD', 'OPTIONS') or
+            request.myuser and request.myuser.is_authenticated
+        )

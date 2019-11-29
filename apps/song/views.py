@@ -13,7 +13,7 @@ from .serializers import SongListSerializer, SongSerializer, SongCreateSerialize
     AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
     PlayListUpdateSerializer, SongUpdateSerializer
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
-from utils.permissions import IsOwnerOrReadOnly
+from utils.permissions import IsOwnerOrReadOnly, IsSongAuthenticated
 
 
 # Create your views here.
@@ -58,18 +58,26 @@ class CommentViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin
 class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
                   UpdateModelMixin,
                   DestroyModelMixin):
+    """
+    List:只能获取到自己上传的数据
+    Retrieve:可以获得别人上传的歌曲
+    """
+
     queryset = Song.objects.all()
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = SongFiliter
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsSongAuthenticated,)
     # authentication_classes = ()
     search_fields = ('name',)
     ordering_fields = ('sid', 'name', 'created')
 
-    # def get_queryset(self):
-    #     """只取当前用户"""
-    #     return Song.objects.filter(creator=self.request.user.id)
+    def get_queryset(self):
+        """只取当前用户"""
+        if self.action in ("list", "update"):
+            return Song.objects.filter(creator=self.request.myuser.id)
+        else:
+            return Song.objects.all()
 
     def get_serializer_class(self):
         if self.action == "list":
