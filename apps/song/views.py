@@ -1,9 +1,6 @@
 from django.db.models import Count
-from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import viewsets, filters
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
     RetrieveModelMixin
@@ -73,19 +70,22 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
     ordering_fields = ('sid', 'name', 'created')
 
     def get_queryset(self):
-        """只取当前用户"""
-        if self.action in ("update", "create"):
+        """有的情况下只取当前用户"""
+        is_self = int(self.request.query_params.get('isSelf', ['1'])[0])
+        print(is_self)
+        if bool(
+                self.action in ("update", "create") or
+                self.action == 'list' and is_self
+        ):
             return Song.objects.filter(creator=self.request.myuser.id)
         else:
             return Song.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.action in ("list", "retrieve"):
             return SongListSerializer
         elif self.action == "create":
             return SongCreateSerializer
-        elif self.action == "retrieve":
-            return SongListSerializer
         elif self.action == "update":
             return SongUpdateSerializer
         return SongSerializer
