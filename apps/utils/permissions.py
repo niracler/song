@@ -24,6 +24,6 @@ class IsSongAuthenticated(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return bool(
-            request.method in ('GET', 'HEAD', 'OPTIONS') or
+            request.method in ('HEAD', 'OPTIONS') or
             request.myuser and request.myuser.is_authenticated
         )
