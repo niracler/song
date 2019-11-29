@@ -17,7 +17,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.creator == request.user.id
 
 
-class IsSongAuthenticated(permissions.BasePermission):
+class IsAuthenticated(permissions.BasePermission):
     """
     Allows access only to authenticated users.
     """

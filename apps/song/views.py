@@ -10,7 +10,7 @@ from .serializers import SongListSerializer, SongSerializer, SongCreateSerialize
     AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
     PlayListUpdateSerializer, SongUpdateSerializer
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
-from utils.permissions import IsOwnerOrReadOnly, IsSongAuthenticated
+from utils.permissions import IsOwnerOrReadOnly, IsAuthenticated
 
 
 # Create your views here.
@@ -64,7 +64,7 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = SongFiliter
-    permission_classes = (IsSongAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     # authentication_classes = ()
     search_fields = ('name',)
     ordering_fields = ('sid', 'name', 'created')
