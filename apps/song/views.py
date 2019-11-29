@@ -10,7 +10,7 @@ from .serializers import SongListSerializer, SongSerializer, SongCreateSerialize
     AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
     PlayListUpdateSerializer, SongUpdateSerializer
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
-from utils.permissions import IsOwnerOrReadOnly, IsAuthenticated
+from utils.permissions import IsAuthenticated
 
 
 # Create your views here.
