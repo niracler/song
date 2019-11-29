@@ -7,8 +7,8 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModel
 from .models import Song, Author, PlayList, Comment, Tag
 from .filters import SongFiliter, AuthorFiliter, PlayListFiliter
 from .serializers import SongListSerializer, SongSerializer, SongCreateSerializer, AuthorSerializer, \
-    AuthorCreateSerializer, PlayListCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
-    PlayListUpdateSerializer, SongUpdateSerializer
+    AuthorCreateSerializer, PlayListSerializer, TagSerializer, CommentSerializer, \
+    SongUpdateSerializer
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from utils.permissions import IsAuthenticated
 
@@ -120,10 +120,4 @@ class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixi
     ordering_fields = ('lid', 'name', 'created')
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return PlayListSerializer
-        elif self.action == "create":
-            return PlayListCreateSerializer
-        elif self.action == "update":
-            return PlayListUpdateSerializer
         return PlayListSerializer
