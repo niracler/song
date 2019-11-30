@@ -9,7 +9,7 @@ class IsAuthenticated(permissions.BasePermission):
     def has_permission(self, request, view):
         return bool(
             view.action == "retrieve" or
-            str(request.query_params.get('search', False)) or
+            request.query_params.get('search', False) or
             request.method in ('HEAD', 'OPTIONS') or
             request.myuser and request.myuser.is_authenticated
         )

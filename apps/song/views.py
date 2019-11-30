@@ -6,7 +6,7 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModel
 
 from .models import Song, Comment
 from .filters import SongFiliter
-from .serializers import SongListSerializer, SongSerializer,  CommentSerializer, \
+from .serializers import SongListSerializer, SongSerializer, CommentSerializer, \
     SongUpdateSerializer
 from utils.permissions import IsAuthenticated
 from utils.pagination import Pagination
@@ -51,13 +51,16 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
 
     def get_queryset(self):
         """有的情况下只取当前用户"""
+        is_search = self.request.query_params.get("search", False)
+        is_all = self.request.query_params.get("all", False)
+
         if bool(
-                self.action in ("update", "create") or
-                (self.action == 'list' and self.request.myuser )
+                (not self.request.myuser and is_search) or  ## 没有登录并且是查找
+                (self.request.myuser and is_search and is_all)  ## 登录查找,并查找全部
         ):
-            return Song.objects.filter(creator=self.request.myuser.id)
-        else:
             return Song.objects.all()
+        else:
+            return Song.objects.filter(creator=self.request.myuser.id)
 
     def get_serializer_class(self):
         if self.action in ("list", "retrieve"):
@@ -65,6 +68,3 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
         elif self.action == "update":
             return SongUpdateSerializer
         return SongSerializer
-
-
-
