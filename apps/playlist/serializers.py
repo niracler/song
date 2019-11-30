@@ -42,8 +42,7 @@ class PlayListSerializer(serializers.ModelSerializer):
     lid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=PlayList.objects.all())],
                                    help_text='空的话， 就是自增序列', required=False)
     tags = serializers.SerializerMethodField()
-    stags = serializers.CharField(label="文章标签的字符串", help_text='中间用空格隔开', allow_null=True, allow_blank=True,
-                                  write_only=True)
+    stags = serializers.CharField(label="歌单标签的字符串", help_text='中间用空格隔开', write_only=True, required=False)
 
     def get_tags(self, obj):
         return [tag.name for tag in obj.tags.all()]
@@ -54,7 +53,7 @@ class PlayListSerializer(serializers.ModelSerializer):
         read_only_fields = ('creator', 'tags', 'creator', 'lid')
 
     def create(self, validated_data):
-        tags = validated_data.pop('stags')
+        tags = validated_data.pop('stags', '')
         playlist = super().create(validated_data)
         playlist.tags.set(get_tag_list(tags))
 
@@ -66,10 +65,10 @@ class PlayListSerializer(serializers.ModelSerializer):
         return playlist
 
     def update(self, instance, validated_data):
-        tags = validated_data.pop('stags')
+        tags = validated_data.pop('stags', '')
+
         playlist = super().update(instance, validated_data)
-        if tags:
-            playlist.tags.set(get_tag_list(tags))
+        playlist.tags.set(get_tag_list(tags))
 
         return playlist
 
