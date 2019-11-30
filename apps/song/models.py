@@ -53,7 +53,7 @@ class PlayList(models.Model):
     tracks = models.ManyToManyField(Song, related_name='tracks', verbose_name='歌曲列表')
     creator = models.IntegerField(default=1, verbose_name='创建者ID')
     tags = models.ManyToManyField(Tag, related_name='playlist_tag', verbose_name='标签')
-    cimg = models.ImageField(upload_to='cimg', default=None, verbose_name='封面')
+    cimg = models.ImageField(upload_to='cimg', default='cimg/default.jpg', verbose_name='封面')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
     description = models.TextField(verbose_name='歌单描述')
