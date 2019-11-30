@@ -68,7 +68,8 @@ class PlayListSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('stags', '')
 
         playlist = super().update(instance, validated_data)
-        playlist.tags.set(get_tag_list(tags))
+        if tags:
+            playlist.tags.set(get_tag_list(tags))
 
         return playlist
 
