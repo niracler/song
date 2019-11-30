@@ -21,7 +21,7 @@ from rest_framework import routers
 
 from author.views import AuthorViewSet
 from core.settings import MEDIA_ROOT, STATIC_ROOT
-from song.views import SongViewSet, CommentViewSet
+from song.views import SongViewSet
 from playlist.views import PlayListViewSet, TagViewSet
 
 router = routers.DefaultRouter()
@@ -29,7 +29,6 @@ router.register('song', SongViewSet)
 router.register('author', AuthorViewSet)
 router.register('playlist', PlayListViewSet)
 router.register('tag', TagViewSet)
-router.register('comment', CommentViewSet)
 
 urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),

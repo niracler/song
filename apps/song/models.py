@@ -16,19 +16,6 @@ class Tag(models.Model):
         return self.name
 
 
-class Comment(models.Model):
-    cid = models.BigAutoField(primary_key=True, verbose_name='ID')
-    body = models.CharField(max_length=512, verbose_name='评论内容')
-    creator = models.IntegerField(default=1, verbose_name='创建者ID')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-
-    class Meta:
-        ordering = ('-cid',)
-
-    def __str__(self):
-        return self.body
-
-
 class Author(models.Model):
     aid = models.BigAutoField(primary_key=True, verbose_name='ID')
     name = models.CharField(max_length=128, verbose_name='作者名')

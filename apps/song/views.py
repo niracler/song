@@ -3,32 +3,15 @@ from rest_framework import viewsets, filters
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
     RetrieveModelMixin
-from .models import Song, Comment
+from .models import Song
 from .filters import SongFiliter
-from .serializers import SongListSerializer, SongSerializer, CommentSerializer, \
+from .serializers import SongListSerializer, SongSerializer, \
     SongUpdateSerializer
 from utils.permissions import IsAuthenticatedOrSearchOnly
 from utils.pagination import Pagination
 
 
 # Create your views here.
-
-
-class CommentViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
-                     UpdateModelMixin,
-                     DestroyModelMixin):
-    queryset = Comment.objects.all()
-    pagination_class = Pagination
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    search_fields = ('cid', 'body')
-    ordering_fields = ('cid', 'body', 'created')
-
-    def get_serializer_class(self):
-        if self.action == "list":
-            return CommentSerializer
-        elif self.action == "create":
-            return CommentSerializer
-        return CommentSerializer
 
 
 class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,

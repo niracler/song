@@ -1,15 +1,8 @@
 from django.db.models import Count
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import Song, Author, PlayList, Comment, Tag
+from .models import Song, Author
 
-
-# -------------------------评论的序列化函数---------------------------------
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = "__all__"
 
 
 # -------------------------歌曲的序列化函数---------------------------------
