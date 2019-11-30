@@ -15,7 +15,6 @@ from .serializers import PlayListSerializer, PlayListDetailSerializer, TagSerial
 from .filters import PlayListFilter
 
 
-
 class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
                       UpdateModelMixin,
                       DestroyModelMixin):

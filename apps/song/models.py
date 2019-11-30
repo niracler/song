@@ -8,6 +8,7 @@ class Tag(models.Model):
     tid = models.BigAutoField(primary_key=True, verbose_name='ID')
     name = models.CharField(max_length=32, unique=True, verbose_name='标签名')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 
     class Meta:
         ordering = ('-tid',)
@@ -20,6 +21,7 @@ class Author(models.Model):
     aid = models.BigAutoField(primary_key=True, verbose_name='ID')
     name = models.CharField(max_length=128, verbose_name='作者名')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
     description = models.TextField(default='这人什么都没写', verbose_name='作者描述')
 
     class Meta:
@@ -36,6 +38,7 @@ class Song(models.Model):
     authors = models.ManyToManyField(Author, related_name='song_author', verbose_name='作者')
     creator = models.IntegerField(default=1, verbose_name='创建者ID')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 
     class Meta:
         ordering = ('-sid',)
@@ -50,7 +53,9 @@ class PlayList(models.Model):
     tracks = models.ManyToManyField(Song, related_name='tracks', verbose_name='歌曲列表')
     creator = models.IntegerField(default=1, verbose_name='创建者ID')
     tags = models.ManyToManyField(Tag, related_name='playlist_tag', verbose_name='标签')
+    cimg = models.ImageField(upload_to='cimg', default=None, verbose_name='封面')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
     description = models.TextField(verbose_name='歌单描述')
 
     class Meta:
