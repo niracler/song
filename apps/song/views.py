@@ -3,12 +3,11 @@ from rest_framework import viewsets, filters
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
     RetrieveModelMixin
-
 from .models import Song, Comment
 from .filters import SongFiliter
 from .serializers import SongListSerializer, SongSerializer, CommentSerializer, \
     SongUpdateSerializer
-from utils.permissions import IsAuthenticated
+from utils.permissions import IsAuthenticatedOrSearchOnly
 from utils.pagination import Pagination
 
 
@@ -44,7 +43,7 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = SongFiliter
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrSearchOnly,)
     # authentication_classes = ()
     search_fields = ('name',)
     ordering_fields = ('sid', 'name', 'created')
@@ -52,11 +51,12 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
     def get_queryset(self):
         """有的情况下只取当前用户"""
         is_search = self.request.query_params.get("search", False)
-        is_all = self.request.query_params.get("all", False)
+        is_self = self.request.query_params.get("isSelf", False)
 
         if bool(
+                (self.action == 'retrieve') or
                 (not self.request.myuser and is_search) or  ## 没有登录并且是查找
-                (self.request.myuser and is_search and is_all)  ## 登录查找,并查找全部
+                (is_search and not is_self)  ## 查找,并且不是查找自己
         ):
             return Song.objects.all()
         else:

@@ -8,10 +8,12 @@ from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin, ListModel
     RetrieveModelMixin
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
-from .serializers import PlayListSerializer
 from song.models import PlayList, Tag
-from .filters import PlayListFilter
 from utils.pagination import Pagination
+from utils.permissions import IsAuthenticatedOrSearchAndTagsOnly
+from .serializers import PlayListSerializer, PlayListDetailSerializer, TagSerializer
+from .filters import PlayListFilter
+
 
 
 class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
@@ -21,10 +23,29 @@ class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixi
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = PlayListFilter
+    permission_classes = (IsAuthenticatedOrSearchAndTagsOnly,)
     search_fields = ('name', 'description')
     ordering_fields = ('lid', 'name', 'created')
 
+    def get_queryset(self):
+        """有的情况下只取当前用户"""
+        is_search = self.request.query_params.get("search", False)
+        is_self = self.request.query_params.get("isSelf", False)
+        is_tags = self.request.query_params.get("tags", False)
+
+        if bool(
+                (self.action == 'retrieve') or
+                (not self.request.myuser and is_search) or  ## 没有登录并且是查找
+                (is_search and not is_self) or  ## 查找,并且不是查找自己
+                (is_tags and not is_self)
+        ):
+            return PlayList.objects.all()
+        else:
+            return PlayList.objects.filter(creator=self.request.myuser.id)
+
     def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return PlayListDetailSerializer
         return PlayListSerializer
 
 

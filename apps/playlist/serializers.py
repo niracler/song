@@ -20,6 +20,22 @@ class TagSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class PlayListDetailSerializer(serializers.ModelSerializer):
+    tags = serializers.SerializerMethodField()
+    tracks = serializers.SerializerMethodField(label="歌曲目录")
+
+    def get_tags(self, obj):
+        return [tag.name for tag in obj.tags.all()]
+
+    def get_tracks(self, obj):
+        return SongListSerializer(obj.tracks, many=True, context={'request': self.context['request']}).data
+
+    class Meta:
+        model = PlayList
+        fields = "__all__"
+        read_only_fields = ('creator', 'tags', 'creator', 'lid')
+
+
 class PlayListSerializer(serializers.ModelSerializer):
     """关于歌单的序列化函数"""
 
@@ -28,32 +44,32 @@ class PlayListSerializer(serializers.ModelSerializer):
     tags = serializers.SerializerMethodField()
     stags = serializers.CharField(label="文章标签的字符串", help_text='中间用空格隔开', allow_null=True, allow_blank=True,
                                   write_only=True)
-    tracks = serializers.SerializerMethodField(label="歌曲目录")
 
     def get_tags(self, obj):
         return [tag.name for tag in obj.tags.all()]
 
-    def get_tracks(self, obj):
-        if self.context['view'].action == 'retrieve':
-            return SongListSerializer(obj.tracks, many=True, context={'request': self.context['request']}).data
-        return [song.sid for song in obj.tracks.all()]
-
     class Meta:
         model = PlayList
         fields = "__all__"
-        read_only_fields = ('creator', 'tags')
+        read_only_fields = ('creator', 'tags', 'creator', 'lid')
 
     def create(self, validated_data):
         tags = validated_data.pop('stags')
         playlist = super().create(validated_data)
         playlist.tags.set(get_tag_list(tags))
 
+        # 记录创建用户
+        user = self.context['request'].myuser
+        playlist.creator = user.id
+        playlist.save()
+
         return playlist
 
     def update(self, instance, validated_data):
         tags = validated_data.pop('stags')
         playlist = super().update(instance, validated_data)
-        playlist.tags.set(get_tag_list(tags))
+        if tags:
+            playlist.tags.set(get_tag_list(tags))
 
         return playlist
 
