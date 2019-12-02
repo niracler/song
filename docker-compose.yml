@@ -3,7 +3,7 @@ version: "3"
 services:
   redis:
     image: redis
-    container_name: gamenews_redis
+    container_name: music_redis
     volumes:
       - redis_data:/data
     command: --appendonly yes --requirepass "123456"
@@ -17,8 +17,6 @@ services:
     volumes:
       - media:/usr/src/app/media/
       - static:/usr/src/app/static/
-    ports:
-      - "8002:8000"
     restart: always
 
   nginx:
@@ -29,6 +27,13 @@ services:
     volumes:
       - static:/usr/share/nginx/html/static
       - media:/usr/share/nginx/html/media
+    restart: always
+
+  frpc:
+    image: snowdreamtech/frpc
+    container_name: music_frpc
+    volumes:
+      - "./frpc/frpc.ini:/etc/frp/frpc.ini"
     restart: always
 
 volumes:
