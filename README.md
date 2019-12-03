@@ -11,3 +11,5 @@ python manage.py migrate
 ```
 
 ## 参考资料
+
+- [django解决跨域请求的问题](https://blog.csdn.net/apple9005/article/details/54427902)
