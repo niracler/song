@@ -43,7 +43,7 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
         ):
             return Song.objects.all()
         else:
-            return Song.objects.filter(creator=self.request.myuser.id)
+            return Song.objects.filter(creator=self.request.myuser.username)
 
     def get_serializer_class(self):
         if self.action in ("list", "retrieve"):
