@@ -182,7 +182,7 @@ sentry_sdk.init(
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://root:123456@music-02.niracler.com:6377')
 
 # 任务执行返回结果
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER_URL', 'redis://root:123456@music-02.niracler.com:6377')
 
 # celery内容等消息的格式设置
 CELERY_ACCEPT_CONTENT = ['application/json', ]
