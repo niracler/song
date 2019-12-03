@@ -10,6 +10,7 @@ services:
     restart: always
     ports:
       - "6377:6379"
+
   web:
     build: .
     container_name: music_web
@@ -28,6 +29,14 @@ services:
       - static:/usr/share/nginx/html/static
       - media:/usr/share/nginx/html/media
     restart: always
+
+  rabbit:
+    container_name: music_rabbit
+    image: rabbitmq:3.8.0-management-alpine
+    env_file: .env
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # here, we can access rabbitmq management plugin
 
   frpc:
     image: snowdreamtech/frpc
