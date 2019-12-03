@@ -4,10 +4,6 @@ from rest_framework.validators import UniqueValidator
 from .models import Song, Author
 
 
-
-# -------------------------歌曲的序列化函数---------------------------------
-
-
 class AuthorSmallSerializer(serializers.ModelSerializer):
     """关于作者的序列化函数"""
 
@@ -19,6 +15,7 @@ class AuthorSmallSerializer(serializers.ModelSerializer):
 class SongSerializer(serializers.ModelSerializer):
     sid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=Song.objects.all())],
                                    help_text='空的话， 就是自增序列', required=False)
+
     class Meta:
         model = Song
         fields = "__all__"
@@ -26,7 +23,7 @@ class SongSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context['request'].myuser
         song = super().create(validated_data)
-        song.creator = user.id
+        song.creator = user.username
         song.save()
         return song
 

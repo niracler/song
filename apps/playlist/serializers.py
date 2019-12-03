@@ -59,7 +59,7 @@ class PlayListSerializer(serializers.ModelSerializer):
 
         # 记录创建用户
         user = self.context['request'].myuser
-        playlist.creator = user.id
+        playlist.creator = user.username
         playlist.save()
 
         return playlist
