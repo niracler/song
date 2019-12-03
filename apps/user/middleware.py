@@ -16,9 +16,11 @@ class AuthMiddleware(MiddlewareMixin):
             token = jwt.decode(token, 'onlinemusic', algorithms=['HS256'])
             user = User()
             user.id = token['uid']
+            user.username = token['username']
             user.is_anonymous = False
             user.is_authenticated = True
             request.myuser = user
+            print(token)
         except Exception as e:
             print(e)
             request.myuser = None

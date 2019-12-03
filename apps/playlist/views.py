@@ -40,7 +40,7 @@ class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixi
         ):
             return PlayList.objects.all()
         else:
-            return PlayList.objects.filter(creator=self.request.myuser.id)
+            return PlayList.objects.filter(creator=self.request.myuser.username)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
