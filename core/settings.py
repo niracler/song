@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -177,3 +177,17 @@ sentry_sdk.init(
     dsn="https://bc2e35585cfc4bfda746dea934ceee70@sentry.io/1828587",
     integrations=[DjangoIntegration()]
 )
+
+# Broker的地址
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://root:123456@music-02.niracler.com:6377')
+
+# 任务执行返回结果
+CELERY_RESULT_BACKEND = 'django-db'
+
+# celery内容等消息的格式设置
+CELERY_ACCEPT_CONTENT = ['application/json', ]
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# celery时区设置，使用settings中TIME_ZONE同样的时区
+CELERY_TIMEZONE = TIME_ZONE

@@ -1,6 +1,7 @@
 #!/bin/sh
 
 #python manage.py flush --no-input
+celery -A display worker -l info &
 python manage.py makemigrations
 python manage.py migrate
 #python manage.py initadmin
