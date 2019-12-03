@@ -36,6 +36,7 @@ class Song(models.Model):
     name = models.CharField(max_length=128, verbose_name='歌曲名称')
     file = models.FileField(upload_to=get_songs_path, verbose_name='歌曲文件链接')
     authors = models.ManyToManyField(Author, related_name='song_author', verbose_name='作者')
+    cimg = models.ImageField(upload_to='cimg', default='cimg/default.jpg', verbose_name='封面')
     click = models.BigIntegerField(default=0, verbose_name='点击次数')
     creator = models.CharField(default='niracler4', max_length=64, verbose_name='创建者用户名')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
