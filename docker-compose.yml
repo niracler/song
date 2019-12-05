@@ -8,8 +8,6 @@ services:
       - redis_data:/data
     command: --appendonly yes --requirepass "123456"
     restart: always
-    ports:
-      - "6377:6379"
 
   web:
     build: .
@@ -18,6 +16,9 @@ services:
     volumes:
       - media:/usr/src/app/media/
       - static:/usr/src/app/static/
+    depends_on:
+      - redis
+      - rabbit
     restart: always
 
   rabbit:
