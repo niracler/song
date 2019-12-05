@@ -6,8 +6,7 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModel
 
 from .models import Song
 from .filters import SongFiliter
-from .serializers import SongListSerializer, SongSerializer, \
-    SongUpdateSerializer
+from .serializers import SongListSerializer, SongSerializer, SongUpdateSerializer
 from utils.permissions import IsAuthenticatedOrSearchOnly
 from utils.pagination import Pagination
 

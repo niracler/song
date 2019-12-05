@@ -20,16 +20,6 @@ services:
       - static:/usr/src/app/static/
     restart: always
 
-  nginx:
-    build: ./nginx
-    container_name: music_nginx
-    ports:
-      - "8000:8000"
-    volumes:
-      - static:/usr/share/nginx/html/static
-      - media:/usr/share/nginx/html/media
-    restart: always
-
   rabbit:
     container_name: music_rabbit
     image: rabbitmq:3.8.0-management-alpine
@@ -38,11 +28,18 @@ services:
       - "5672:5672"
       - "15672:15672"  # here, we can access rabbitmq management plugin
 
-  frpc:
+  frpc-inter:
     image: snowdreamtech/frpc
     container_name: music_frpc
     volumes:
-      - "./frpc/frpc.ini:/etc/frp/frpc.ini"
+      - "./frpc/frpc1.ini:/etc/frp/frpc.ini"
+    restart: always
+
+  frpc-out:
+    image: snowdreamtech/frpc
+    container_name: music_frpc
+    volumes:
+      - "./frpc/frpc2.ini:/etc/frp/frpc.ini"
     restart: always
 
 volumes:
