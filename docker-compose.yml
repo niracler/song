@@ -27,6 +27,8 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"  # here, we can access rabbitmq management plugin
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq
 
   frpc-inter:
     image: snowdreamtech/frpc
@@ -46,3 +48,4 @@ volumes:
   redis_data:
   media:
   static:
+  rabbit_data:
