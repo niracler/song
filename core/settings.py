@@ -152,6 +152,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# 设置上传的文件的权限
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 # 缓存设置
@@ -159,11 +160,13 @@ REST_FRAMEWORK_EXTENSIONS = {
     'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60
 }
 
+REDIS_HOST = os.environ.get('REDIS_HOST', 'redis://root:123456@redis:6379')
+
 # 使用redis缓存
 CACHES = {
     "default": {
         "BACKEND": os.environ.get('CACHES_BACKEND', 'django.core.cache.backends.locmem.LocMemCache'),
-        "LOCATION": os.environ.get('REDIS_HOST', 'redis://root:123456@redis:6379'),
+        "LOCATION": REDIS_HOST,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -179,10 +182,10 @@ sentry_sdk.init(
 )
 
 # Broker的地址
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://root:123456@music-02.niracler.com:6377')
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', REDIS_HOST)
 
 # 任务执行返回结果
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER_URL', 'redis://root:123456@music-02.niracler.com:6377')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER_URL', REDIS_HOST)
 
 # celery内容等消息的格式设置
 CELERY_ACCEPT_CONTENT = ['application/json', ]

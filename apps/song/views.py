@@ -3,10 +3,10 @@ from rest_framework import viewsets, filters
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
     RetrieveModelMixin
+
 from .models import Song
 from .filters import SongFiliter
-from .serializers import SongListSerializer, SongSerializer, \
-    SongUpdateSerializer
+from .serializers import SongListSerializer, SongSerializer, SongUpdateSerializer
 from utils.permissions import IsAuthenticatedOrSearchOnly
 from utils.pagination import Pagination
 
@@ -51,3 +51,7 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
         elif self.action == "update":
             return SongUpdateSerializer
         return SongSerializer
+
+    def get_object(self):
+
+        return super().get_object()
