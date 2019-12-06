@@ -6,7 +6,7 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModel
 
 from .models import Song
 from .filters import SongFiliter
-from .serializers import SongListSerializer, SongSerializer
+from .serializers import SongListSerializer, SongSerializer, SongDetailSerializer
 from utils.permissions import IsAuthenticatedOrSearchOnly
 from utils.pagination import Pagination
 
@@ -46,8 +46,10 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
             return Song.objects.filter(creator=self.request.myuser.username)
 
     def get_serializer_class(self):
-        if self.action in ("list", "retrieve"):
+        if self.action in ("list", ):
             return SongListSerializer
+        elif self.action == "retrieve":
+            return SongDetailSerializer
         else:
             return SongSerializer
 

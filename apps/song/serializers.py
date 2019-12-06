@@ -34,4 +34,13 @@ class SongListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Song
+        exclude = ('lyric',)
+
+
+class SongDetailSerializer(serializers.ModelSerializer):
+    """关于歌曲的序列化函数"""
+    authors = AuthorSmallSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Song
         fields = "__all__"
