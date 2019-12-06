@@ -1,3 +1,5 @@
+import re
+
 from django.db.models import Count
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -40,7 +42,24 @@ class SongListSerializer(serializers.ModelSerializer):
 class SongDetailSerializer(serializers.ModelSerializer):
     """关于歌曲的序列化函数"""
     authors = AuthorSmallSerializer(many=True, read_only=True)
+    lyric = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Song
         fields = "__all__"
+
+    def get_lyric(self, obj):
+        lyric = []
+        res = re.findall(r'\[(.*?)\](.*?)\n', obj.lyric)
+
+        for i in res:
+            t = re.findall(r'(.*?):(.*?)\.(...)', i[0])[0]
+            sec = 60*int(t[0]) + int(t[1]) + int(t[2])/1000
+            lyric.append(
+                {
+                    'time': sec,
+                    'text': i[1].strip(),
+                }
+            )
+
+        return lyric
