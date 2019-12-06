@@ -10,6 +10,23 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+## 如何团队项目保持同步(重要)
+
+([附上IDEA可视化操作](https://blog.csdn.net/autfish/article/details/52513465))
+
+第一次时需要,与团队仓库建立联系
+
+```shell script
+git remote add upstream https://github.com/dgut-group-ten/song.git
+```
+
+工作前后要运行这几条命令,和团队项目保持同步
+
+```shell script
+git fetch upstream
+git merge upstream/master
+```
+
 ## 参考资料
 
 - [django解决跨域请求的问题](https://blog.csdn.net/apple9005/article/details/54427902)

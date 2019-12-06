@@ -14,7 +14,7 @@ from utils.pagination import Pagination
 # Create your views here.
 
 
-class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
+class SongViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,
                   UpdateModelMixin,
                   DestroyModelMixin):
     """
