@@ -35,11 +35,3 @@ class SongListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Song
         fields = "__all__"
-
-
-class SongUpdateSerializer(serializers.ModelSerializer):
-    """关于歌曲修改的序列化函数"""
-
-    class Meta:
-        model = Song
-        fields = ('name', 'authors')
