@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 import os
+import django
 from celery import Celery
 import dotenv
 
@@ -11,6 +12,7 @@ project_settings = '%s.settings' % project_name
 
 # 设置环境变量
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', project_settings)
+django.setup()
 
 # 实例化Celery
 app = Celery(project_name)

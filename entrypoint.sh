@@ -2,6 +2,7 @@
 
 #python manage.py flush --no-input
 celery -A core worker -l info &
+celery -A core beat -l info &
 python manage.py makemigrations
 python manage.py migrate
 #python manage.py initadmin
