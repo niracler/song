@@ -13,6 +13,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -45,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
-    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -194,3 +194,13 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 # celery时区设置，使用settings中TIME_ZONE同样的时区
 CELERY_TIMEZONE = TIME_ZONE
+
+from celery.schedules import crontab
+
+# 定时任务
+CELERY_BEAT_SCHEDULE = {
+    'update-click-task': {
+        'task': 'apps.song.tasks.update_click',
+        'schedule': timedelta(minutes=10),
+    },
+}
