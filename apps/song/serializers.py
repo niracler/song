@@ -50,16 +50,22 @@ class SongDetailSerializer(serializers.ModelSerializer):
 
     def get_lyric(self, obj):
         lyric = []
-        res = re.findall(r'\[(.*?)\](.*?)\n', obj.lyric)
+        try:
+            res = re.findall(r'\[(.*?)\](.*?)\n', obj.lyric)
 
-        for i in res:
-            t = re.findall(r'(.*?):(.*?)\.(...)', i[0])[0]
-            sec = 60*int(t[0]) + int(t[1]) + int(t[2])/1000
-            lyric.append(
-                {
-                    'time': sec,
-                    'text': i[1].strip(),
-                }
-            )
+            for i in res:
+                t = re.findall(r'(.*?):(.*?)\.(..)', i[0])
+                if not t: continue
+
+                t = t[0]
+                sec = 60 * int(t[0]) + int(t[1]) + int(t[2]) / 100
+                lyric.append(
+                    {
+                        'time': sec,
+                        'text': i[1].strip(),
+                    }
+                )
+        except Exception as e:
+            print(e)
 
         return lyric
