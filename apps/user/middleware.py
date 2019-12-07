@@ -20,9 +20,6 @@ class AuthMiddleware(MiddlewareMixin):
             user.is_anonymous = False
             user.is_authenticated = True
             request.myuser = user
-            print(token)
         except Exception as e:
             print(e)
             request.myuser = None
-
-        print("我也就你进来的时候打个招呼")

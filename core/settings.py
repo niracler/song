@@ -201,6 +201,6 @@ from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     'update-click-task': {
         'task': 'apps.song.tasks.update_click',
-        'schedule': timedelta(minutes=10),
+        'schedule': timedelta(minutes=15),
     },
 }

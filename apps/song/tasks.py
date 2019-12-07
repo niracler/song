@@ -31,6 +31,7 @@ def add_item_click(res_type, get_item):
 
     for key in keys:
         key = key.decode("utf-8")
+        key = str(key)
         click = client.zscore(res_type, key)
         client.zrem(res_type, key)
 
@@ -40,5 +41,5 @@ def add_item_click(res_type, get_item):
             item.click = item.click + int(click)
             item.save()
         except Exception as e:
-            print("{}:{}的资源不存在, {}".format(res_type, key, str(e)))
+            print("{}:{}的资源不存在, {},{}".format(res_type, key, click, str(e)))
     print('{}:添加点击数结束'.format(res_type))
