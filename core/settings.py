@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'song.apps.SongConfig',
     'user.apps.UserConfig',
+    'playlist.apps.PlaylistConfig',
     'rest_framework',
     'django_filters',
     'corsheaders',
