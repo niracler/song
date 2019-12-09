@@ -1,5 +1,4 @@
 import random
-import pytz
 import requests
 from faker import Faker
 from song.models import PlayList
@@ -10,6 +9,7 @@ fake = Faker("zh_CN")
 def fake_comment(count=50):
     """生成假文章"""
 
+    max_id = 87000
     for i in range(count):
         try:
             list_lid = PlayList.objects.all().values_list('lid', flat=True)
@@ -30,18 +30,20 @@ def fake_comment(count=50):
             }
 
             data = {
-                'content': fake.text(100),
+                'content': fake.text(random.randint(7, 140)),
                 'type': 1,
                 'resourceId': random.choice(list_lid),
-                'repliedCommentId': random.randint(7, 1000),
+                'repliedCommentId': random.choice(
+                    [random.randint(7, max_id), random.randint(7, max_id//2), None, None]),
             }
             # print(data['repliedCommentId'])
 
-            url = 'https://music.niracler.com:8001/comment'
+            url = 'https://music-01.niracler.com:8001/comment'
 
             r = requests.post(url, headers=headers, data=data)
             if r.status_code != 201:
                 print(r.text)
+            max_id += 1
 
         except Exception as e:
             print(e)
