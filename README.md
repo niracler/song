@@ -31,4 +31,5 @@ git merge upstream/master
 
 - [django解决跨域请求的问题](https://blog.csdn.net/apple9005/article/details/54427902)
 - [Docker安装RabbitMQ（docker-compose.yml）](https://blog.csdn.net/Aria_Miazzy/article/details/89332658)
-- [Django配置celery执行异步任务和定时任务](https://blog.csdn.net/qq_37049050/article/details/96424723)
+- [Django配置celery执行异步任务和定时任务](https://blog.csdn.net/jiandanokok/article/details/102335091)
+- [Convert bytes to a string](https://stackoverflow.com/questions/606191/convert-bytes-to-a-string)
