@@ -2,7 +2,7 @@ from django.db.models import Count
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from song.models import PlayList, Tag
+from song.models import PlayList, Tag, Song
 from song.serializers import SongListSerializer
 
 
@@ -43,6 +43,8 @@ class PlayListSerializer(serializers.ModelSerializer):
                                    help_text='空的话， 就是自增序列', required=False)
     tags = serializers.SerializerMethodField()
     stags = serializers.CharField(label="歌单标签的字符串", help_text='中间用空格隔开', write_only=True, required=False)
+    tracks = serializers.PrimaryKeyRelatedField(queryset=Song.objects.all(), many=True, required=False,
+                                                allow_empty=True, allow_null=True)
 
     def get_tags(self, obj):
         return [tag.name for tag in obj.tags.all()]
