@@ -22,6 +22,8 @@ class Song(models.Model):
     class Meta:
         ordering = ('-sid',)
         db_table = 'song_song'
+        verbose_name = '歌曲'
+        verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.name

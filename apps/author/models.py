@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 class Author(models.Model):
@@ -12,6 +13,8 @@ class Author(models.Model):
     class Meta:
         ordering = ('-aid',)
         db_table = 'song_author'
+        verbose_name = '作者'
+        verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.name
