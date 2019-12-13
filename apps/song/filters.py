@@ -1,5 +1,5 @@
 import django_filters
-from .models import Song, Author, PlayList, Tag
+from .models import Song
 
 
 class SongFiliter(django_filters.rest_framework.FilterSet):

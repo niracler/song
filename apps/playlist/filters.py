@@ -1,6 +1,6 @@
 import django_filters
 
-from song.models import PlayList, Tag
+from .models import PlayList, Tag
 
 
 class PlayListFilter(django_filters.rest_framework.FilterSet):

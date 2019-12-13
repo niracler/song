@@ -10,7 +10,7 @@ from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
 from author.filters import AuthorFiliter
 from author.serializers import AuthorSerializer
-from song.models import Author
+from .models import Author
 from utils.pagination import Pagination
 
 
