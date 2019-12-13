@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'song.apps.SongConfig',
     'user.apps.UserConfig',
     'playlist.apps.PlaylistConfig',
+    'author.apps.AuthorConfig',
     'rest_framework',
     'django_filters',
     'corsheaders',

@@ -2,7 +2,7 @@ from django.db.models import Count
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from song.models import PlayList, Tag, Song
+from .models import PlayList, Tag, Song
 from song.serializers import SongListSerializer
 
 

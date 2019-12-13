@@ -8,7 +8,7 @@ from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin, ListModel
     RetrieveModelMixin
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
-from song.models import PlayList, Tag
+from .models import PlayList, Tag
 from utils.pagination import Pagination
 from utils.permissions import IsAuthenticatedOrSearchAndTagsOnly
 from .serializers import PlayListSerializer, PlayListDetailSerializer, TagSerializer
