@@ -17,7 +17,7 @@ class AuthorSmallSerializer(serializers.ModelSerializer):
 class SongSerializer(serializers.ModelSerializer):
     sid = serializers.IntegerField(label='ID', validators=[UniqueValidator(queryset=Song.objects.all())],
                                    help_text='空的话， 就是自增序列', required=False)
-    lyric = serializers.CharField(allow_null=True)
+    lyric = serializers.CharField(allow_blank=True, allow_null=True, required=False)
 
     class Meta:
         model = Song
