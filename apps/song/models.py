@@ -16,6 +16,7 @@ class Song(models.Model):
     click = models.BigIntegerField(default=0, verbose_name='点击次数')
     lyric = models.TextField(default=None, verbose_name='歌词')
     creator = models.CharField(default='niracler4', max_length=64, verbose_name='创建者用户名')
+    area = models.CharField(max_length=32, default='未知', verbose_name='地区')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 
@@ -27,6 +28,3 @@ class Song(models.Model):
 
     def __str__(self):
         return self.name
-
-
-
