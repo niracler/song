@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import UserOperation, VisitorCount, Comment, EmailConfirm, User, UserInfo
+from .models import UserOperation, VisitorCount, Comment, EmailConfirm, User
 
 
 # Register your models here.
@@ -48,9 +48,3 @@ class UserAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
     ordering = ('uid',)
 
-
-@admin.register(UserInfo)
-class UserInfoAdmin(admin.ModelAdmin):
-    """管理类"""
-    list_display = ('uid', 'name',)
-    ordering = ('uid',)

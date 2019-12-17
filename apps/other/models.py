@@ -93,16 +93,3 @@ class User(models.Model):
         verbose_name = '用户'
         verbose_name_plural = verbose_name
         db_table = 't_user'
-
-
-class UserInfo(models.Model):
-    uid = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=33, blank=True, null=True)
-    head_icon = models.CharField(max_length=255, blank=True, null=True)
-    description = models.CharField(max_length=150, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        verbose_name = '用户信息'
-        verbose_name_plural = verbose_name
-        db_table = 't_user_info'
