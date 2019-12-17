@@ -3,7 +3,9 @@ from django.utils.deprecation import MiddlewareMixin
 import jwt
 
 
-class User(AbstractUser):
+class MyUser(object):
+    id = 0
+    username = ''
     is_anonymous = True
     is_authenticated = False
 
@@ -14,7 +16,7 @@ class AuthMiddleware(MiddlewareMixin):
         token = request.headers.get("Token", "")
         try:
             token = jwt.decode(token, 'onlinemusic', algorithms=['HS256'])
-            user = User()
+            user = MyUser()
             user.id = token['uid']
             user.username = token['name']
             user.is_anonymous = False
