@@ -48,5 +48,10 @@ services:
 volumes:
   redis_data:
   media:
+     driver: local
+     driver_opts:
+       type: none
+       o: bind
+       device: /mnt/vdb/song_media/_data
   static:
   rabbit_data:

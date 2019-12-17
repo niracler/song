@@ -10,7 +10,7 @@ from .models import Song
 class SongAdmin(admin.ModelAdmin):
     """文章管理类"""
     list_display = ('sid', 'name', 'created', 'updated', 'creator', 'click')
-    list_filter = ('creator', )
+    list_filter = ('area', )
     search_fields = ('name', 'lyric')
     date_hierarchy = 'created'
     ordering = ('created', 'name')
