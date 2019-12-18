@@ -2,8 +2,10 @@ import re
 
 from django.db.models import Count
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
-from .models import Song, Author
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
+
+from utils.utils import CurrentUserDefault
+from .models import Song, Author, SongFav
 
 
 class AuthorSmallSerializer(serializers.ModelSerializer):
@@ -71,3 +73,36 @@ class SongDetailSerializer(serializers.ModelSerializer):
             print(e)
 
         return lyric
+
+
+class SongFavSerializer(serializers.ModelSerializer):
+    """用户收藏的序列化函数"""
+
+    username = serializers.HiddenField(
+        default=CurrentUserDefault()
+    )
+    song = SongListSerializer()
+
+    class Meta:
+        model = SongFav
+        fields = ('username', 'song', 'id')
+
+
+class SongFavCreateSerializer(serializers.ModelSerializer):
+    """用户收藏的序列化函数"""
+
+    username = serializers.HiddenField(
+        default=CurrentUserDefault()
+    )
+
+    class Meta:
+        model = SongFav
+
+        fields = ('username', 'song', 'id')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=SongFav.objects.all(),
+                fields=('username', 'song'),
+                message="已经收藏"
+            )
+        ]

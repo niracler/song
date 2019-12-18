@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from author.models import Author
 from .tools import get_songs_path
@@ -28,3 +29,20 @@ class Song(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SongFav(models.Model):
+    """用户收藏的文章的关系类"""
+
+    username = models.CharField(max_length=64, verbose_name='用户名')
+    song = models.ForeignKey(Song, on_delete=models.DO_NOTHING, verbose_name="歌曲")
+    created = models.DateTimeField(default=timezone.now, verbose_name="添加时间")
+
+    class Meta:
+        ordering = ('-created',)
+        verbose_name = "歌曲收藏"
+        verbose_name_plural = verbose_name
+        unique_together = ("username", "song")
+
+    def __str__(self):
+        return self.username
