@@ -1,8 +1,9 @@
 from django.db.models import Count
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
-from .models import PlayList, Tag, Song
+from utils.utils import CurrentUserDefault
+from .models import PlayList, Tag, Song, PlayListFav
 from song.serializers import SongListSerializer
 
 
@@ -52,7 +53,7 @@ class PlayListSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlayList
         fields = "__all__"
-        read_only_fields = ('creator', 'tags', 'creator', 'lid')
+        read_only_fields = ('creator', 'tags', 'lid')
 
     def create(self, validated_data):
         tags = validated_data.pop('stags', '')
@@ -88,3 +89,36 @@ def get_tag_list(tags):
         tag_list = []
         print(e)
     return tag_list
+
+
+class PlaylistFavSerializer(serializers.ModelSerializer):
+    """用户收藏的序列化函数"""
+
+    username = serializers.HiddenField(
+        default=CurrentUserDefault()
+    )
+    playlist = PlayListSerializer()
+
+    class Meta:
+        model = PlayListFav
+        fields = ('username', 'playlist', 'id')
+
+
+class PlaylistFavCreateSerializer(serializers.ModelSerializer):
+    """用户收藏的序列化函数"""
+
+    username = serializers.HiddenField(
+        default=CurrentUserDefault()
+    )
+
+    class Meta:
+        model = PlayListFav
+
+        fields = ('username', 'playlist', 'id')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=PlayListFav.objects.all(),
+                fields=('username', 'playlist'),
+                message="已经收藏"
+            )
+        ]

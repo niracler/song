@@ -21,14 +21,16 @@ from rest_framework import routers
 
 from author.views import AuthorViewSet
 from core.settings import MEDIA_ROOT, STATIC_ROOT
-from song.views import SongViewSet
-from playlist.views import PlayListViewSet, TagViewSet
+from song.views import SongViewSet, SongFavViewSet
+from playlist.views import PlayListViewSet, TagViewSet, PlaylistFavViewSet
 
 router = routers.DefaultRouter()
 router.register('song', SongViewSet)
 router.register('author', AuthorViewSet)
 router.register('playlist', PlayListViewSet)
 router.register('tag', TagViewSet)
+router.register('playlistFav', PlaylistFavViewSet)
+router.register('songFav', SongFavViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

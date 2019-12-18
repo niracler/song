@@ -4,14 +4,39 @@ from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
     RetrieveModelMixin
 
-from .models import Song
+from .models import Song, SongFav
 from .filters import SongFiliter
-from .serializers import SongListSerializer, SongSerializer, SongDetailSerializer
-from utils.permissions import IsAuthenticatedOrSearchOnly
+from .serializers import SongListSerializer, SongSerializer, SongDetailSerializer, SongFavCreateSerializer, \
+    SongFavSerializer
+from utils.permissions import IsAuthenticatedOrSearchOnly, IsOwnerOrReadOnly
 from utils.pagination import Pagination
 
 
 # Create your views here.
+
+class SongFavViewSet(viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixin, ListModelMixin):
+    """用户收藏的功能的视图"""
+    queryset = SongFav.objects.all()
+    pagination_class = Pagination
+    permission_classes = (IsOwnerOrReadOnly,)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return SongFavCreateSerializer
+        else:
+            return SongFavSerializer
+
+    def get_queryset(self):
+        """只取当前用户"""
+        username = self.request.query_params.get("username", False)
+        if username:
+            username = username[0]
+            return SongFav.objects.filter(username=username)
+        elif self.request.myuser:
+            username = self.request.myuser.username
+            return SongFav.objects.filter(username=username)
+        else:
+            return []
 
 
 class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,

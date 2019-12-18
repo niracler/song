@@ -1,5 +1,4 @@
 from django.db.models import Count
-from django.shortcuts import render
 
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
@@ -8,11 +7,36 @@ from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin, ListModel
     RetrieveModelMixin
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
-from .models import PlayList, Tag
+from .models import PlayList, Tag, PlayListFav
 from utils.pagination import Pagination
-from utils.permissions import IsAuthenticatedOrSearchAndTagsOnly
-from .serializers import PlayListSerializer, PlayListDetailSerializer, TagSerializer
+from utils.permissions import IsAuthenticatedOrSearchAndTagsOnly, IsOwnerOrReadOnly
+from .serializers import PlayListSerializer, PlayListDetailSerializer, TagSerializer, PlaylistFavSerializer, PlaylistFavCreateSerializer
 from .filters import PlayListFilter
+
+
+class PlaylistFavViewSet(viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixin, ListModelMixin):
+    """用户收藏的功能的视图"""
+    queryset = PlayListFav.objects.all()
+    pagination_class = Pagination
+    permission_classes = (IsOwnerOrReadOnly,)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return PlaylistFavCreateSerializer
+        else:
+            return PlaylistFavSerializer
+
+    def get_queryset(self):
+        """只取当前用户"""
+        username = self.request.query_params.get("username", False)
+        if username:
+            username = username[0]
+            return PlayListFav.objects.filter(username=username)
+        elif self.request.myuser:
+            username = self.request.myuser.username
+            return PlayListFav.objects.filter(username=username)
+        else:
+            return []
 
 
 class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin,

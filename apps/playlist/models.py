@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 
 # Create your models here.
@@ -16,6 +17,7 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class PlayList(models.Model):
     lid = models.BigAutoField(primary_key=True, verbose_name='ID')
@@ -37,3 +39,20 @@ class PlayList(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class PlayListFav(models.Model):
+    """用户收藏的文章的关系类"""
+
+    username = models.CharField(max_length=64, verbose_name='用户名')
+    playlist = models.ForeignKey(PlayList, on_delete=models.DO_NOTHING, verbose_name="歌单")
+    created = models.DateTimeField(default=timezone.now, verbose_name="添加时间")
+
+    class Meta:
+        ordering = ('-created',)
+        verbose_name = "歌单收藏"
+        verbose_name_plural = verbose_name
+        unique_together = ("username", "playlist")
+
+    def __str__(self):
+        return self.username
