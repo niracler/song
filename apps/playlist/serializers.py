@@ -103,6 +103,24 @@ class PlaylistFavSerializer(serializers.ModelSerializer):
         model = PlayListFav
         fields = ('username', 'playlist', 'id')
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        # check the request is list view or detail view
+        # is_list_view = isinstance(self.instance, list)
+        # extra_ret = {'key': 'list value'} if is_list_view else {'key': 'single value'}
+
+        extra_ret = {}
+        for key in ret['playlist'].keys():
+            extra_ret[key] = ret['playlist'][key]
+
+        extra_ret['fid'] = ret['id']
+
+        ret.update(extra_ret)
+
+        del ret['id']
+        del ret['playlist']
+        return ret
+
 
 class PlaylistFavCreateSerializer(serializers.ModelSerializer):
     """用户收藏的序列化函数"""

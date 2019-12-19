@@ -33,3 +33,4 @@ git merge upstream/master
 - [Docker安装RabbitMQ（docker-compose.yml）](https://blog.csdn.net/Aria_Miazzy/article/details/89332658)
 - [Django配置celery执行异步任务和定时任务](https://blog.csdn.net/jiandanokok/article/details/102335091)
 - [Convert bytes to a string](https://stackoverflow.com/questions/606191/convert-bytes-to-a-string)
+- [How to return custom JSON in Django REST Framework](https://stackoverflow.com/questions/35019030/how-to-return-custom-json-in-django-rest-framework)
