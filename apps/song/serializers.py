@@ -85,7 +85,7 @@ class SongFavSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SongFav
-        fields = ('username', 'song', 'fid')
+        fields = ('username', 'song', 'id')
 
 
 class SongFavCreateSerializer(serializers.ModelSerializer):
@@ -98,7 +98,7 @@ class SongFavCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SongFav
 
-        fields = ('username', 'song', 'fid')
+        fields = ('username', 'song', 'id')
         validators = [
             UniqueTogetherValidator(
                 queryset=SongFav.objects.all(),

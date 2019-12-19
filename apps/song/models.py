@@ -34,7 +34,6 @@ class Song(models.Model):
 class SongFav(models.Model):
     """用户收藏的文章的关系类"""
 
-    fid = models.BigAutoField(primary_key=True, verbose_name='ID')
     username = models.CharField(max_length=64, verbose_name='用户名')
     song = models.ForeignKey(Song, on_delete=models.DO_NOTHING, verbose_name="歌曲")
     created = models.DateTimeField(default=timezone.now, verbose_name="添加时间")
