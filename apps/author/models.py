@@ -12,7 +12,6 @@ class Author(models.Model):
 
     class Meta:
         ordering = ('-aid',)
-        db_table = 'song_author'
         verbose_name = '作者'
         verbose_name_plural = verbose_name
 
