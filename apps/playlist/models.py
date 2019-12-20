@@ -13,7 +13,6 @@ class Tag(models.Model):
 
     class Meta:
         ordering = ('-tid',)
-        db_table = 'song_tag'
 
     def __str__(self):
         return self.name
@@ -33,7 +32,6 @@ class PlayList(models.Model):
 
     class Meta:
         ordering = ('-lid',)
-        db_table = 'song_playlist'
         verbose_name = '歌单'
         verbose_name_plural = verbose_name
 
