@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import UserOperation, VisitorCount, Comment, EmailConfirm, User
+from .models import UserOperation, VisitorCount, Comment, User
 
 
 # Register your models here.
@@ -29,16 +29,9 @@ class VisitorCountAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     """管理类"""
-    list_display = ('cid','content', 'uid')
+    list_display = ('cid', 'content', 'uid')
     date_hierarchy = 'created'
     ordering = ('cid',)
-
-
-@admin.register(EmailConfirm)
-class EmailConfirmAdmin(admin.ModelAdmin):
-    """管理类"""
-    list_display = ('eid','email')
-    ordering = ('eid',)
 
 
 @admin.register(User)
@@ -47,4 +40,3 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('uid', 'name', 'email')
     date_hierarchy = 'created'
     ordering = ('uid',)
-

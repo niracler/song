@@ -63,20 +63,6 @@ class Comment(models.Model):
         db_table = 't_comment'
 
 
-class EmailConfirm(models.Model):
-    eid = models.AutoField(primary_key=True)
-    check_code = models.CharField(max_length=10, blank=True, null=True)
-    confirm_time = models.DateTimeField(blank=True, null=True)
-    email = models.CharField(max_length=40, blank=True, null=True)
-    status = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        verbose_name = '邮箱确认'
-        verbose_name_plural = verbose_name
-        db_table = 't_email_confirm'
-
-
 class User(models.Model):
     uid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=33, blank=True, null=True)
