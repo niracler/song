@@ -18,7 +18,7 @@ class SongFavViewSet(viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixi
     """用户收藏的功能的视图"""
     queryset = SongFav.objects.all()
     pagination_class = Pagination
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly, )
 
     def get_serializer_class(self):
         if self.action == "create":
@@ -71,7 +71,7 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
             return Song.objects.filter(creator=self.request.myuser.username)
 
     def get_serializer_class(self):
-        if self.action in ("list", ):
+        if self.action in ("list",):
             return SongListSerializer
         elif self.action == "retrieve":
             return SongDetailSerializer
