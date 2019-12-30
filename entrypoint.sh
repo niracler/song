@@ -2,7 +2,8 @@
 
 #python manage.py flush --no-input
 celery -A core worker -l info &
-celery -A core beat -l info --pidfile=/opt/celeryd.pid  &
+rm /opt/celeryd.pid
+celery -A core beat -l info --pidfile=/opt/celeryd.pid -S django &
 python manage.py makemigrations
 python manage.py migrate
 #python manage.py initadmin
