@@ -3,7 +3,9 @@ from celery import shared_task
 import datetime
 import redis
 from django.conf import settings
-from song.models import Song, PlayList
+
+from playlist.models import PlayList
+from song.models import Song
 
 
 @shared_task
