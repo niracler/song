@@ -10,7 +10,7 @@ from .models import UserOperation, VisitorCount, Comment, User
 class UserOperationAdmin(admin.ModelAdmin):
     """管理类"""
     list_display = ('id', 'uid', 'time_local', 'res_type')
-    list_filter = ('res_type',)
+    list_filter = ('res_type','time_local')
     search_fields = ('res_id',)
     date_hierarchy = 'time_local'
     ordering = ('time_local', 'uid')
@@ -19,8 +19,8 @@ class UserOperationAdmin(admin.ModelAdmin):
 @admin.register(VisitorCount)
 class VisitorCountAdmin(admin.ModelAdmin):
     """管理类"""
-    list_display = ('id', 'time_local', 'res_type', 'click')
-    list_filter = ('res_type', 'vis_type', 'time_type')
+    list_display = ('id', 'vis_type', 'res_type', 'res_id', 'click', 'time_type', 'time_local')
+    list_filter = ('res_type', 'vis_type', 'time_type', 'time_local')
     search_fields = ('res_type',)
     date_hierarchy = 'time_local'
     ordering = ('time_local',)
@@ -30,6 +30,7 @@ class VisitorCountAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     """管理类"""
     list_display = ('cid', 'content', 'uid')
+    list_filter = ('created',)    
     date_hierarchy = 'created'
     ordering = ('cid',)
 
@@ -37,6 +38,7 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """管理类"""
-    list_display = ('uid', 'name', 'email')
+    list_display = ('uid', 'name', 'email', 'status')
+    list_filter = ('status', 'created')
     date_hierarchy = 'created'
     ordering = ('uid',)

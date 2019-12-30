@@ -9,18 +9,18 @@ from .models import Song, SongFav
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
     """文章管理类"""
-    list_display = ('sid', 'name', 'created', 'updated', 'creator', 'click')
-    list_filter = ('area',)
+    list_display = ('sid', 'name', 'creator', 'click', 'created', 'updated')
+    list_filter = ('area','created')
     search_fields = ('name', 'lyric')
     date_hierarchy = 'created'
     ordering = ('created', 'name')
 
 
 @admin.register(SongFav)
-class PlayListAdmin(admin.ModelAdmin):
+class SongFavAdmin(admin.ModelAdmin):
     """歌单管理类"""
     list_display = ('id', 'username', 'song_id', 'created')
-    list_filter = ('username',)
+    list_filter = ('created', )
     search_fields = ('username', 'song_id')
     date_hierarchy = 'created'
     ordering = ('created', 'username')
