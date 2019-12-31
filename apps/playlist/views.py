@@ -14,7 +14,7 @@ from .serializers import PlayListSerializer, PlayListDetailSerializer, TagSerial
 from .filters import PlayListFilter
 
 
-class PlaylistFavViewSet(viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixin, ListModelMixin):
+class PlaylistFavViewSet(CacheResponseMixin, viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixin, ListModelMixin):
     """用户收藏的功能的视图"""
     queryset = PlayListFav.objects.all()
     pagination_class = Pagination

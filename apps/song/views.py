@@ -14,7 +14,7 @@ from utils.pagination import Pagination
 
 # Create your views here.
 
-class SongFavViewSet(viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixin, ListModelMixin):
+class SongFavViewSet(CacheResponseMixin, viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixin, ListModelMixin):
     """用户收藏的功能的视图"""
     queryset = SongFav.objects.all()
     pagination_class = Pagination
