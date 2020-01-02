@@ -13,6 +13,8 @@ class Tag(models.Model):
 
     class Meta:
         ordering = ('-tid',)
+        verbose_name = '歌单标签'
+        verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.name

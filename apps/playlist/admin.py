@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import PlayList, PlayListFav
+from .models import PlayList, PlayListFav, Tag
 
 
 # Register your models here.
@@ -24,3 +24,13 @@ class PlayListFavAdmin(admin.ModelAdmin):
     search_fields = ('username', 'playlist_id')
     date_hierarchy = 'created'
     ordering = ('created', 'username')
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    """歌单管理类"""
+    list_display = ('tid', 'name', 'created')
+    list_filter = ('created',)
+    search_fields = ('name', )
+    date_hierarchy = 'created'
+    ordering = ('created', 'name')
+

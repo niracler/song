@@ -48,7 +48,7 @@ class PlayListViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixi
     filter_class = PlayListFilter
     permission_classes = (IsAuthenticatedOrSearchAndTagsOnly,)
     search_fields = ('name', 'description')
-    ordering_fields = ('lid', 'name', 'created')
+    ordering_fields = ('lid', 'name', 'created', 'updated', 'click')
 
     def get_queryset(self):
         """有的情况下只取当前用户"""

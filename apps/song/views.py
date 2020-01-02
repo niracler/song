@@ -54,7 +54,7 @@ class SongViewSet(CacheResponseMixin, viewsets.GenericViewSet, ListModelMixin, C
     permission_classes = (IsAuthenticatedOrSearchOnly,)
     # authentication_classes = ()
     search_fields = ('name',)
-    ordering_fields = ('sid', 'name', 'created')
+    ordering_fields = ('sid', 'name', 'created', 'updated', 'click')
 
     def get_queryset(self):
         """有的情况下只取当前用户"""
