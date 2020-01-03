@@ -46,6 +46,7 @@ class PlayListSerializer(serializers.ModelSerializer):
     stags = serializers.CharField(label="歌单标签的字符串", help_text='中间用空格隔开', write_only=True, required=False)
     tracks = serializers.PrimaryKeyRelatedField(queryset=Song.objects.all(), many=True, required=False,
                                                 allow_empty=True, allow_null=True)
+    song = serializers.CharField(write_only=True, required=False)
 
     def get_tags(self, obj):
         return [tag.name for tag in obj.tags.all()]
@@ -69,10 +70,16 @@ class PlayListSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         tags = validated_data.pop('stags', '')
+        song = validated_data.pop('song', '')
 
         playlist = super().update(instance, validated_data)
         if tags:
             playlist.tags.set(get_tag_list(tags))
+        if song:
+            try:
+                playlist.tracks.add(song)
+            except Exception as e:
+                print("不存在的歌曲：" + song + str(e))
 
         return playlist
 
