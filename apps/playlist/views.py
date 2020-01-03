@@ -10,11 +10,13 @@ from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from .models import PlayList, Tag, PlayListFav
 from utils.pagination import Pagination
 from utils.permissions import IsAuthenticatedOrSearchAndTagsOnly, IsOwnerOrReadOnly
-from .serializers import PlayListSerializer, PlayListDetailSerializer, TagSerializer, PlaylistFavSerializer, PlaylistFavCreateSerializer
+from .serializers import PlayListSerializer, PlayListDetailSerializer, TagSerializer, PlaylistFavSerializer, \
+    PlaylistFavCreateSerializer
 from .filters import PlayListFilter
 
 
-class PlaylistFavViewSet(CacheResponseMixin, viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixin, ListModelMixin):
+class PlaylistFavViewSet(CacheResponseMixin, viewsets.GenericViewSet, CreateModelMixin, DestroyModelMixin,
+                         ListModelMixin):
     """用户收藏的功能的视图"""
     queryset = PlayListFav.objects.all()
     pagination_class = Pagination
