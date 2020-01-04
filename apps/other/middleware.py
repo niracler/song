@@ -13,6 +13,7 @@ class MyUser(object):
 class AuthMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
+        print(request.body)
         token = request.headers.get("Token", "")
         try:
             token = jwt.decode(token, 'onlinemusic', algorithms=['HS256'])
