@@ -1,7 +1,7 @@
 import random
 import requests
 from faker import Faker
-from song.models import PlayList
+from .models import PlayList
 
 fake = Faker("zh_CN")
 
